@@ -103,6 +103,9 @@ class ACMEAccount(object):
                 self.client.set_account_uri(info['location'])
             return True, result
         elif info['status'] == (409 if self.client.version == 1 else 200):
+            if isinstance(result, bytes):
+                result = result.decode(encoding="utf-8")
+
             # Account did exist
             if result.get('status') == 'deactivated':
                 # A bug in Pebble (https://github.com/letsencrypt/pebble/issues/179) and
